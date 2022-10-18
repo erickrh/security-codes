@@ -5,9 +5,9 @@ import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <UseState />
-      <ClassState />
+    <div className='App'>
+      <UseState name='UseState' />
+      <ClassState name='ClassState' />
     </div>
   );
 }
