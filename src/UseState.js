@@ -1,7 +1,26 @@
 import React from 'react';
 
 function UseState({ name }) {
+  // eslint-disable-next-line no-unused-vars
   const [error, setError] = React.useState(false); // Forma imperativa.
+  const [loading, setLoding] = React.useState(false);
+
+  React.useEffect(() => {
+    console.log('Empezando efecto.');
+
+    if (loading) {
+      setTimeout(() => {
+        console.log('Haciendo validación');
+      
+        setLoding(false);
+  
+        console.log('Terminando validación.');
+        
+      }, 2000);
+    }
+
+    console.log('Terminando efecto.');
+  }, [loading]);
 
   return (
     <div>
@@ -12,9 +31,13 @@ function UseState({ name }) {
         <p>Error: el código es incorrecto.</p>
       )}
 
+      {loading && (
+        <p>Cargando...</p>
+      )}
+
       <input type="text" placeholder='Código de seguridad' />
       <button
-        onClick={() => setError(!error)}
+        onClick={() => setLoding(true)}
       >Comprobar</button>
     </div>
   );
