@@ -6,20 +6,20 @@ function UseState({ name }) {
   const [loading, setLoding] = React.useState(false);
 
   React.useEffect(() => {
-    console.log('Empezando efecto.');
+    console.log('Empezando efecto. UseState.');
 
     if (loading) {
       setTimeout(() => {
-        console.log('Haciendo validación');
+        console.log('Haciendo validación. UseState');
       
         setLoding(false);
   
-        console.log('Terminando validación.');
+        console.log('Terminando validación. UseState');
         
       }, 2000);
     }
 
-    console.log('Terminando efecto.');
+    console.log('Terminando efecto. UseState');
   }, [loading]);
 
   return (
