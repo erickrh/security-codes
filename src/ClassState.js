@@ -11,7 +11,7 @@ class ClassState extends React.Component {
     };
   }
 
-  // Primer método que se ejecuta. Equivalente a useEffect, con array vacio.
+  /*   // Primer método que se ejecuta. Equivalente a useEffect, con array vacio.
   UNSAFE_componentWillMount() {
     console.log('componentWillMount');
   }
@@ -19,7 +19,7 @@ class ClassState extends React.Component {
   // Segundo en ejecutarse.
   componentDidMount() {
     console.log('componentDidMount');
-  }
+  } */
 
   // Equivalente a useEffect, con el valor deseado a renderizar, en el array.
   componentDidUpdate() {
