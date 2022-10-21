@@ -3,54 +3,88 @@ import React from 'react';
 const SECURITY_CODE = 'paradigma';
 
 function UseState({ name }) {
-  const [error, setError] = React.useState(false); // Estado de Forma independiente, imperativa, simple.
+
+  // Estado de forma compuesta.
+  const [state, setState] = React.useState({
+    error: false,
+    loading: false,
+    value: '',
+  });
+
+  /*   const [error, setError] = React.useState(false); // Estado de Forma independiente, imperativa, simple.
   const [loading, setLoding] = React.useState(false);
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = React.useState(''); */
 
   React.useEffect(() => {
     console.log('Empezando efecto. UseState.');
 
-    if (loading) {
-      setError(false);
+    if (state.loading) {
+      setState({
+        ...state,
+        error: false
+      });
+
       document.querySelector('.useStateInput').placeholder = 'Código de seguridad';
+      
       setTimeout(() => {
-        if (value !== SECURITY_CODE) {
-          setError(true);
+        if (state.value !== SECURITY_CODE) {
+          setState({
+            ...state,
+            error: true,
+            loading: false
+          });
+        } else {
+          setState({
+            ...state,
+            error: false,
+            loading: false
+          });
         }
-        setLoding(false);
         console.log('Terminando validación. UseState');
       }, 2000);
     }
 
     console.log('Terminando efecto. UseState');
-  }, [loading]);
+  }, [state.loading]);
+
+  console.log(state);
 
   return (
     <div>
       <h2>Eliminar {name}</h2>
       <p>Por favor, escribe el código de seguridad.</p>
       
-      {error && (
+      {state.error && (
         <p>Error: el código es incorrecto.</p>
       )}
 
-      {loading && (
+      {state.loading && (
         <p>Cargando...</p>
       )}
 
       <input
         className='useStateInput'
         placeholder='Código de seguridad'
-        value={value}
+        value={state.value}
         onChange={event => {
-          setValue(event.target.value);
+          setState({
+            ...state,
+            value: event.target.value
+          });
         }}
       />
 
       <button
         onClick={() => {
-          if (value.length >= 1) setLoding(true);
-          else (document.querySelector('.useStateInput').placeholder = 'Por favor escribe un código');
+          if (state.value.length >= 1) {
+            setState({
+              ...state,
+              loading: true
+            });
+          }
+          else {
+            document.querySelector('.useStateInput').placeholder = 'Por favor escribe un código';
+          }
         }}
       >Comprobar</button>
     </div>
