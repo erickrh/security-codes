@@ -3,7 +3,6 @@ import React from 'react';
 const SECURITY_CODE = 'paradigma';
 
 function UseState({ name }) {
-  // eslint-disable-next-line no-unused-vars
   const [error, setError] = React.useState(false); // Estado de Forma independiente, imperativa, simple.
   const [loading, setLoding] = React.useState(false);
   const [value, setValue] = React.useState('');
@@ -43,7 +42,7 @@ function UseState({ name }) {
         className='useStateInput'
         placeholder='Código de seguridad'
         value={value}
-        onChange={(event) => {
+        onChange={event => {
           setValue(event.target.value);
         }}
       />
