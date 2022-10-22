@@ -17,33 +17,83 @@ function UseState({ name }) {
   const [loading, setLoding] = React.useState(false);
   const [value, setValue] = React.useState(''); */
 
-  /* FORMA IMPERACTIVA  */
+  /* FORMA SEMIDECLARATIVA  */
+
+  const resetOnError = () => {
+    setState({
+      ...state,
+      error: false
+    });
+  };
+
+  const resetInput = () => {
+    document.querySelector('.useStateInput').placeholder = 'Código de seguridad';
+  };
+
+  const onError = () => {
+    setState({
+      ...state,
+      error: true,
+      loading: false
+    });
+  };
+
+  const onConfirm = () => {
+    setState({
+      ...state,
+      error: false,
+      loading: false,
+      confirmed: true,
+    });
+  };
+
+  const onWrite = (newValue) => {
+    setState({
+      ...state,
+      value: newValue,
+    });
+  };
+
+  const onCheck = () => {
+    setState({
+      ...state,
+      loading: true
+    });
+  };
+
+  const emptyInput = () => {
+    document.querySelector('.useStateInput').placeholder = 'Por favor escribe un código';
+  };
+
+  const onDelete = () => {
+    setState({
+      ...state,
+      deleted: true,
+    });
+  };
+
+  const onReset = () => {
+    setState({
+      ...state,
+      confirmed: false,
+      deleted: false,
+      value: '',
+    });
+  };
 
   React.useEffect(() => {
     console.log('Empezando efecto. UseState.');
 
     if (state.loading) {
-      setState({
-        ...state,
-        error: false
-      });
+      resetOnError();
 
-      document.querySelector('.useStateInput').placeholder = 'Código de seguridad';
+      resetInput();
       
       setTimeout(() => {
         if (state.value !== SECURITY_CODE) {
-          setState({
-            ...state,
-            error: true,
-            loading: false
-          });
+          onError();
         } else {
-          setState({
-            ...state,
-            error: false,
-            loading: false,
-            confirmed: true,
-          });
+          onConfirm();
         }
         console.log('Terminando validación. UseState');
       }, 2000);
@@ -52,7 +102,7 @@ function UseState({ name }) {
     console.log('Terminando efecto. UseState');
   }, [state.loading]);
 
-  console.log(state);
+  // console.log(state);
 
   if (!state.deleted && !state.confirmed) {
     return (
@@ -72,25 +122,13 @@ function UseState({ name }) {
           className='useStateInput'
           placeholder='Código de seguridad'
           value={state.value}
-          onChange={event => {
-            setState({
-              ...state,
-              value: event.target.value
-            });
-          }}
+          onChange={event => onWrite(event.target.value)}
         />
   
         <button
           onClick={() => {
-            if (state.value.length >= 1) {
-              setState({
-                ...state,
-                loading: true
-              });
-            }
-            else {
-              document.querySelector('.useStateInput').placeholder = 'Por favor escribe un código';
-            }
+            if (state.value.length >= 1) onCheck();
+            else emptyInput();
           }}
         >Comprobar</button>
       </React.Fragment>
@@ -101,24 +139,13 @@ function UseState({ name }) {
         <h2>Eliminar {name}</h2>
         <p>¿Estas seguro que deseas eliminar {name}</p>
         <button
-          onClick={() => {
-            setState({
-              ...state,
-              deleted: true,
-            });
-          }}
+          onClick={onDelete}
         >
         Si, por favor.
         </button>
 
         <button
-          onClick={() => {
-            setState({
-              ...state,
-              confirmed: false,
-              value: '',
-            });
-          }}
+          onClick={onReset}
         >
         No, gracias.
         </button>
@@ -129,14 +156,7 @@ function UseState({ name }) {
       <React.Fragment>
         <h2>Recuperar UseState</h2>
         <button
-          onClick={() => {
-            setState({
-              ...state,
-              confirmed: false,
-              deleted: false,
-              value: '',
-            });
-          }}
+          onClick={onReset}
         >
         Restablecer
         </button>

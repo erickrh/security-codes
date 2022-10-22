@@ -1,7 +1,7 @@
 import React from 'react';
 import { Loading } from './Loading';
 
-const SECURITY_CODE = 'paradigma';
+const SECURITY_CODE = '123';
 
 class ClassState extends React.Component {
   constructor(props) {
