@@ -5,19 +5,36 @@ const SECURITY_CODE = '123';
 function UseReducer({ name }) {
   const [state, dispatch] = React.useReducer(reducerSwitch, initialState);
 
+  // Action Creators
+  const resetOnError = () => dispatch({ type: actionTypes.resetError });
+  const resetInput = () => dispatch({ type: actionTypes.resetInput });
+  const onError = () => dispatch({ type: actionTypes.error });
+  const onConfirm = () => dispatch({ type: actionTypes.confirm });
+  const onCheck = () => dispatch({ type: actionTypes.check });
+  const emptyInput = () => dispatch({ type: actionTypes.emptyInput });
+  const onDelete = () => dispatch({ type: actionTypes.delete });
+  const onReset = () => dispatch({ type: actionTypes.reset });
+  const onWrite = ({ target: { value } }) => {
+    dispatch({ type: actionTypes.write, payload: value });
+  };
+  /* Otra manera de onWrite
+  const onWrite = (newValue) => {
+    dispatch({ type: actionTypes.write, payload: newValue });
+  };*/
+
   React.useEffect(() => {
     console.log('Empezando efecto. UseReducer.');
 
     if (state.loading) {
-      dispatch({type: 'RESET_ERROR'});
+      resetOnError();
 
-      dispatch({type: 'RESET_INPUT'});
+      resetInput();
       
       setTimeout(() => {
         if (state.value !== SECURITY_CODE) {
-          dispatch({type: 'ERROR'});
+          onError();
         } else {
-          dispatch({type: 'CONFIRM'});
+          onConfirm();
         }
         console.log('Terminando validación. UseReducer');
       }, 2000);
@@ -45,15 +62,15 @@ function UseReducer({ name }) {
         <input
           placeholder={state.placeholder}
           value={state.value}
-          onChange={event => {
-            dispatch({type: 'WRITE', payload: { inputValue: event.target.value }});
-          }}
+          disabled={state.loading}
+          onChange={onWrite} // Tiene el event implicito. onChange={event => onWrite(event.target.value)} Otra manera
         />
   
         <button
+          disabled={state.loading}
           onClick={() => {
-            if (state.value.length >= 1) dispatch({type: 'CHECK'});
-            else dispatch({type: 'EMPTY_INPUT'});
+            if (state.value.length >= 1) onCheck();
+            else emptyInput();
           }}
         >Comprobar</button>
       </React.Fragment>
@@ -64,13 +81,13 @@ function UseReducer({ name }) {
         <h2>Eliminar {name}</h2>
         <p>¿Estas seguro que deseas eliminar {name}</p>
         <button
-          onClick={() => dispatch({type: 'DELETE'})}
+          onClick={onDelete}
         >
         Si, por favor.
         </button>
 
         <button
-          onClick={() => dispatch({type: 'RESET'})}
+          onClick={onReset}
         >
         No, gracias.
         </button>
@@ -81,7 +98,7 @@ function UseReducer({ name }) {
       <React.Fragment>
         <h2>Recuperar UseReducer</h2>
         <button
-          onClick={() => dispatch({type: 'RESET'})}
+          onClick={onReset}
         >
         Restablecer
         </button>
@@ -97,6 +114,18 @@ const initialState = {
   deleted: false,
   confirmed: false,
   placeholder: 'Código de seguridad',
+};
+
+const actionTypes = {
+  resetError: 'RESET_ERROR',
+  resetInput: 'RESET_INPUT',
+  emptyInput: 'EMPTY_INPUT',
+  error: 'ERROR',
+  confirm: 'CONFIRM',
+  write: 'WRITE',
+  check: 'CHECK',
+  delete: 'DELETE',
+  reset: 'RESET',
 };
 
 /* // const reducer = (state, action) => {}; sintaxis básica.
@@ -139,50 +168,50 @@ const reducer = (state, action) => {
 // FORMA MAS POPULAR.
 const reducerSwitch = (state, action) => {
   switch(action.type) {
-  case 'RESET_ERROR':
+  case actionTypes.resetError:
     return {
       ...state,
       error: false,
     };
-  case 'RESET_INPUT':
+  case actionTypes.resetInput:
     return {
       ...state,
       placeholder: 'Código de seguridad',
     };
-  case 'EMPTY_INPUT':
+  case actionTypes.emptyInput:
     return {
       ...state,
       placeholder: 'Por favor escribe un código',
     };
-  case 'ERROR':
+  case actionTypes.error:
     return {
       ...state,
       error: true,
       loading: false,
     };
-  case 'CONFIRM':
+  case actionTypes.confirm:
     return {
       ...state,
       error: false,
       loading: false,
       confirmed: true,
     };
-  case 'WRITE':
+  case actionTypes.write:
     return {
       ...state,
-      value: action.payload.inputValue,
+      value: action.payload,
     };
-  case 'CHECK':
+  case actionTypes.check:
     return {
       ...state,
       loading: true,
     };
-  case 'DELETE':
+  case actionTypes.delete:
     return {
       ...state,
       deleted: true,
     };
-  case 'RESET':
+  case actionTypes.reset:
     return {
       ...state,
       confirmed: false,

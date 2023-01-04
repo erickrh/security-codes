@@ -14,7 +14,7 @@ function UseState({ name }) {
   });
 
   /*   const [error, setError] = React.useState(false); // Estado de Forma independiente, simple.
-  const [loading, setLoding] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const [value, setValue] = React.useState(''); */
 
   /* FORMA SEMIDECLARATIVA  */
